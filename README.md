@@ -41,17 +41,39 @@ In case you like to deploy via the portal just click the deploy button next:
 
 [![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fcpinotossi%2Faz-netperf%2Fmain%2Fdeploy.json)  
 
+### Get Public IP (PIP)
+
+After the successfull deployment you will need to retrieve the PIP which is provided via the Deployment Output or directly via the Azure Portal.
+
 ## Start RTT Test from your client
 
+Replace PIP with the Public IP of your VM and execute this command on your client machine:
+
 ~~~~bash
-netperf -H 52.157.216.29,4 -v 2 -Z 0+01tdTzPwjcIFM/sphtJQ== -P 1 -t TCP_RR -- -O min_latency,mean_latency,max_latency
+netperf -H <PIP>,4 -v 2 -Z 0+01tdTzPwjcIFM/sphtJQ== -P 1 -t TCP_RR -- -O min_latency,mean_latency,max_latency
 ~~~~
+
+Output:
+
+~~~~bash
+MIGRATED TCP REQUEST/RESPONSE TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 51.124.73.157 () port 0 AF_INET : demo : first burst 0
+get_transport_info: getsockopt: errno 92
+Minimum      Mean         Maximum
+Latency      Latency      Latency
+Microseconds Microseconds Microseconds
+
+18732        20179.96     42079
+~~~~
+
+NOTE: The Values are presented in Microsecond (0.001 Millisecond).
 
 ## Bastion
 
 The ARM Template will also install a Bastion Host which will allow you to log into the VM via the Azure Portal.
 
-NOTE: This way we avoid to have to keep Port 22 open on the vm.
+Default credentials:
+- User: demouser
+- password: demo!pass123
 
 ## Clean up
 
